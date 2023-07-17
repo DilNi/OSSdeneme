@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Add Bootstrap CSS link here -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="header">
+    <h2 class="logo">Logo</h2>
+    <nav class="navigation">
+        <a href="#">Ana Sayfa</a>
+        <a href="/quiz">Kısa Sınav</a>
+        <a href="/contact.ejs">İletişim</a>
+        <a href="/logout" class="btnLogout">ÇıkıSş Yap</a>
+    </nav>
+  </div>
+
+  <div class="wrapper_2">
+    <div class="navbar">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" data-bs-toggle="tab" href="#panel1">Matematik</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="tab" href="#panel2">Türkçe</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="tab" href="#panel3">Kimya</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="panel1">
+          <h3>Panel 1 Content</h3>
+          <p>This is the content for Panel 1.</p>
+        </div>
+        <div class="tab-pane fade" id="panel2">
+          <h3>Panel 2 Content</h3>
+          <p>This is the content for Panel 2.</p>
+        </div>
+        <div class="tab-pane fade" id="panel3">
+          <h3>Panel 3 Content</h3>
+          <p>This is the content for Panel 3.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Add Bootstrap JS script here -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

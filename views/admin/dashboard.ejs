@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <h2 class="logo">Logo</h2>
+        <nav class="navigation">
+            <a href="#">Ana Sayfa</a>
+            <a href="#">Hakkında</a>
+            <a href="/quiz">Kısa Sınav</a>
+            <a href="#">Contact</a>
+            <a href="/logout" class="btnLogout">Çıkış Yap</a>
+        </nav>
+    </div>
+
+    <div class="wrapper_2">
+        <h2>Soru Ekle</h2>
+
+        <form action="/admin/save-question" method="post">
+            <label for="subject">Soru eklenecek dersi seçin:</label>
+            <hr>
+            <select id="subject" name="subject" required>
+                <option value="select" selected>Seç</option>
+                <option value="matematik">Matematik</option>
+                <option value="turkce">Türkçe</option>
+                <option value="kimya">Kimya</option>
+                <option value="biyoloji">Biyoloji</option>
+            </select>
+            <br>
+            <label for="difficulty">Sorunun zorluğunu seçiniz:</label>
+            <hr>
+            <select id="difficulty" name="difficulty" required>
+                <option value="select" selected>Seç</option>
+                <option value="easy">Kolay</option>
+                <option value="medium">Orta</option>
+                <option value="hard">Zor</option>
+            </select>
+            <br>
+            <label for="question">Soruyu giriniz:</label>
+            <hr>
+            <textarea class="form-control" style="height: 100px" name="question" id="question" rows="4" required></textarea>
+            <hr>
+            <label for="option1">Seçenekleri giriniz:</label>
+            <hr>
+            <label for="option1">A şıkkı:</label><br>
+            <input type="text" id="option1" name="options[]" required><br>
+            <label for="option2">B şıkkı:</label><br>
+            <input type="text" id="option2" name="options[]" required><br>
+            <label for="option3">C şıkkı:</label><br>
+            <input type="text" id="option3" name="options[]" required><br>
+            <label for="option4">D şıkkı:</label><br>
+            <input type="text" id="option4" name="options[]" required><br>
+            <label for="option5">E şıkkı:</label><br>
+            <input type="text" id="option5" name="options[]" required><br>
+            <label for="correctOption">Doğru şıkkı seçin (1-5 arası bir sayı girin):</label><br>
+            <input type="number" id="correctOption" name="correctOption" required min="1" max="5"><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script src="/js/script.js"></script>
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" nomodule></script>
+</body>
+
+</html>
