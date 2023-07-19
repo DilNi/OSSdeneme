@@ -41,6 +41,7 @@ mongoose.connect('mongodb+srv://Yagmur:saydam14@cluster0.3qhe1pz.mongodb.net/<qu
   });
 
 const User = require('./models/Users');
+const Question = require('./models/Question');
 
 // Ana sayfa
 app.get('/', (req, res) => {
@@ -114,29 +115,140 @@ const quizRouter = require('./routes/user');
 app.use('/quiz', quizRouter);
 app.use('/user', quizRouter);
 
+
 // Admin dashboard sayfası
 app.get('/admin/dashboard', (req, res) => {
   if (req.session.adminLoggedIn) {
-    res.render('admin/dashboard', { message: req.flash('message') });
+    Question.find({})
+      .then(questions => {
+        res.render('admin/dashboard', { questions, message: req.flash('message') });
+      })
+      .catch(err => {
+        console.error('Soru çekme hatası:', err);
+        req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
+        res.redirect('/admin/dashboard');
+      });
   } else {
+    req.flash('message', 'Önce giriş yapmalısınız.'); // Giriş yapmadan erişim engelleme
     res.redirect('/login');
   }
 });
 
+
 const questionController = require('./controllers/questionController');
 
-// Soru ekleme isteğine yönelik yönlendirme
-app.post('/admin/save-question', questionController.addQuestion, () => {
-  res.render('index', { message: req.flash('message') });
 
+// Soru ekleme isteğine yönelik yönlendirme
+app.post('/admin/dashboard', questionController.addQuestion);
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+app.get('/dashboard', (req, res) => {
+  if (!req.session.adminLoggedIn) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
+
+  Question.find({ user: req.session.adminLoggedIn._id })
+    .then(questions => {
+      res.render('admin/dashboard', { user: req.session.adminLoggedIn, questions, message: req.flash('message') });
+    })
+    .catch(err => {
+      console.error('Soru çekme hatası:', err);
+      req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/dashboard');
+    });
 });
 
 
-// Diğer yönlendirmeler ve middleware'ler
+// Soru ekleme işlemi
+app.post('/dashboard', (req, res) => {
+  if (!req.session.adminLoggedIn) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
+
+  const { subject, difficulty, description, options, correctOption } = req.body;
+
+  const newQuestion = new Question({
+    subject,
+    difficulty,
+    description,
+    options,
+    correctOption,
+    user: req.session.adminLoggedIn._id
+  });
+
+  newQuestion.save()
+    .then(() => {
+      req.flash('message', 'Soru başarıyla eklendi.');
+      res.redirect('/dashboard');
+    })
+    .catch(err => {
+      console.error('Soru ekleme hatası:', err);
+      req.flash('message', 'Soru eklerken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/dashboard');
+    });
+});
+
+// Soru silme işlemi
+app.post('/dashboard/delete/:id', (req, res) => {
+  if (!req.session.user) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
+
+  const questionId = req.params.id;
+
+  Question.findOneAndDelete({ _id: questionId, user: req.session.user._id })
+    .then(() => {
+      req.flash('message', 'Soru başarıyla silindi.');
+      res.redirect('/dashboard');
+    })
+    .catch(err => {
+      console.error('Soru silme hatası:', err);
+      req.flash('message', 'Soru silerken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/dashboard');
+    });
+});
+
+// Soru güncelleme işlemi
+app.post('/dashboard/update/:id', (req, res) => {
+  if (!req.session.user) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
+
+  const questionId = req.params.id;
+  const { subject, difficulty, description, options, correctOption } = req.body;
+
+  Question.findOneAndUpdate(
+    { _id: questionId, user: req.session.user._id },
+    { subject, difficulty, description,options,correctOption },
+    { new: true }
+  )
+    .then(question => {
+      if (!question) {
+        req.flash('message', 'Soru bulunamadı veya güncelleme yetkiniz yok.');
+        res.redirect('/dashboard');
+        return;
+      }
+
+      req.flash('message', 'Soru başarıyla güncellendi.');
+      res.redirect('/dashboard');
+    })
+    .catch(err => {
+      console.error('Soru güncelleme hatası:', err);
+      req.flash('message', 'Soru güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/dashboard');
+    });
+});
 
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-

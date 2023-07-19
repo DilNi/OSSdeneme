@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
     <link rel="stylesheet" href="/css/style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -21,53 +23,152 @@
     </div>
 
     <div class="wrapper_2">
-        <h2>Soru Ekle</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Soru Ekle</h2>
+                <form action="/dashboard" method="post">
+                  <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Ders:</label>
+                        <select class="form-select" aria-label="Default select example" name="subject" id="subject" required>
+                            <option value="select" selected>Seç</option>
+                            <option value="matematik">Matematik</option>
+                            <option value="turkce">Türkçe</option>
+                            <option value="kimya">Kimya</option>
+                            <option value="biyoloji">Biyoloji</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-form-label">Zorluk:</label>
+                        <select class="form-select" aria-label="Default select example" name="difficulty" id="difficulty" required>
+                            <option value="select" selected>Seç</option>
+                            <option value="easy">Kolay</option>
+                            <option value="medium">Orta</option>
+                            <option value="hard">Zor</option>
+                        </select>
+                    </div>
+                </div>
+                
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
 
-        <form action="/admin/save-question" method="post">
-            <label for="subject">Soru eklenecek dersi seçin:</label>
-            <hr>
-            <select id="subject" name="subject" required>
-                <option value="select" selected>Seç</option>
-                <option value="matematik">Matematik</option>
-                <option value="turkce">Türkçe</option>
-                <option value="kimya">Kimya</option>
-                <option value="biyoloji">Biyoloji</option>
-            </select>
-            <br>
-            <label for="difficulty">Sorunun zorluğunu seçiniz:</label>
-            <hr>
-            <select id="difficulty" name="difficulty" required>
-                <option value="select" selected>Seç</option>
-                <option value="easy">Kolay</option>
-                <option value="medium">Orta</option>
-                <option value="hard">Zor</option>
-            </select>
-            <br>
-            <label for="question">Soruyu giriniz:</label>
-            <hr>
-            <textarea class="form-control" style="height: 100px" name="question" id="question" rows="4" required></textarea>
-            <hr>
-            <label for="option1">Seçenekleri giriniz:</label>
-            <hr>
-            <label for="option1">A şıkkı:</label><br>
-            <input type="text" id="option1" name="options[]" required><br>
-            <label for="option2">B şıkkı:</label><br>
-            <input type="text" id="option2" name="options[]" required><br>
-            <label for="option3">C şıkkı:</label><br>
-            <input type="text" id="option3" name="options[]" required><br>
-            <label for="option4">D şıkkı:</label><br>
-            <input type="text" id="option4" name="options[]" required><br>
-            <label for="option5">E şıkkı:</label><br>
-            <input type="text" id="option5" name="options[]" required><br>
-            <label for="correctOption">Doğru şıkkı seçin (1-5 arası bir sayı girin):</label><br>
-            <input type="number" id="correctOption" name="correctOption" required min="1" max="5"><br>
-            <input type="submit" value="Submit">
-        </form>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                      <label for="description" class="col-sm-2 col-form-label"> Soruyu giriniz:</label>
+                      <div class="col-sm-10">
+                        <textarea class="form-control" style="height: 100px" name="description" id="description"
+                          rows="4" required></textarea>
+                      </div>
+                    </div>
+                    <hr>
+                    <label for="option1">Seçenekleri giriniz:</label>
+                    <div class="row mb-3">
+                      <label for="option1" class="col-sm-2 col-form-label">A şıkkı:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="options[]" id="option1" required>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="option2" class="col-sm-2 col-form-label">B şıkkı:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="options[]" id="option2" required>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="option3" class="col-sm-2 col-form-label">C şıkkı:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="options[]" id="option3" required>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="option4" class="col-sm-2 col-form-label">D şıkkı:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="options[]" id="option4" required>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="option5" class="col-sm-2 col-form-label">E şıkkı:</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" name="options[]" id="option5" required>
+                      </div>
+                    </div>
+                    <label for="correctOption">Doğru şıkkı seçin (1-5 arası bir sayı girin):</label><br>
+                    <input type="number" id="correctOption" name="correctOption" required min="1" max="5"><br>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-10">
+                      <button type="submit" class="btn btn-primary rounded-pill" value="Submit">Soru Ekle</button>
+                    </div>
+                  </div>
+
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h2>Kaydedilen Sorular</h2>
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ders</th>
+                            <th scope="col">Zorluk</th>
+                            <th scope="col">Soru</th>
+                            <th scope="col">Seçenekler</th>
+                            <th scope="col">Doğru Seçenek</th>
+                            <th scope="col">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% questions.forEach((question, index) => { %>
+
+                        <tr>
+                          <th scope="row">
+                            <%= index + 1 %>
+                          </th>
+                          <td>
+                            <%= question.subject %>
+                          </td>
+                          <td>
+                            <%= question.difficulty %>
+                          </td>
+                          <td>
+                            <%= question.description %>
+                          </td>
+                          <td>
+                            <% question.options.forEach((option) => { %>
+                              <%= option %><br>
+                            <% }); %>
+                          </td>
+                          <td>
+                            <%= question.correctOption %>
+                          </td>
+                          <td>
+                            <form action="/admin/delete-question/<%= question._id %>" method="POST"
+                              style="display: inline;">
+                              <button type="submit" class="btn btn-danger rounded-pill">Sil</button>
+                            </form>
+                            <a href="/admin/edit-question/<%= question._id %>"
+                              class="btn btn-success rounded-pill">Düzenle</a>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <script src="/js/script.js"></script>
-    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
-    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" nomodule></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+        type="module"></script>
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+        nomodule></script>
 </body>
 
 </html>
