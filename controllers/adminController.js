@@ -1,12 +1,12 @@
 const Question = require('../models/Question');
 
 exports.saveQuestion = (req, res) => {
-  const { subject, difficulty, question, option1, option2, option3, option4, option5, correctOption } = req.body;
+  const { subject, difficulty, description, option1, option2, option3, option4, option5, correctOption } = req.body;
 
   const newQuestion = new Question({
     subject,
     difficulty,
-    question,
+    description,
     option1,
     option2,
     option3,

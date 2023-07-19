@@ -10,7 +10,7 @@ const questionSchema = new mongoose.Schema({
         enum: ['hard', 'medium', 'easy'],
         required: true
     },
-    question: {
+    description: {
         type: String,
         required: true
     },
