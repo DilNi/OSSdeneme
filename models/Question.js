@@ -7,7 +7,7 @@ const questionSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String,
-        enum: ['hard', 'medium', 'easy'],
+        enum: ['Zor', 'Orta', 'Kolay'],
         required: true
     },
     description: {
