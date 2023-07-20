@@ -43,6 +43,8 @@ mongoose.connect('mongodb+srv://Yagmur:saydam14@cluster0.3qhe1pz.mongodb.net/<qu
 const User = require('./models/Users');
 const Question = require('./models/Question');
 
+
+
 // Ana sayfa
 app.get('/', (req, res) => {
   res.render('index', { message: req.flash('message') });
@@ -192,6 +194,7 @@ app.post('/dashboard', (req, res) => {
       res.redirect('/dashboard');
     });
 });
+
 
 // Soru silme işlemi
 app.post('/dashboard/delete/:id', (req, res) => {
