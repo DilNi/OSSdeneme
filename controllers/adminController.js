@@ -6,8 +6,8 @@ exports.saveQuestion = (req, res) => {
   const newQuestion = new Question({
     subject,
     difficulty,
-    description,
     resim_yol,
+    description,
     option1,
     option2,
     option3,

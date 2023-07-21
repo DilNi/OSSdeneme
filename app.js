@@ -10,6 +10,22 @@ const multer = require('multer');
 
 // Express uygulamasının oluşturulması
 const app = express();
+const uploadDirectory = path.join(__dirname, 'uploads');
+
+// Multer ayarları -> resim_yol için
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDirectory);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const extension = path.extname(file.originalname);
+    cb(null, 'image-' + uniqueSuffix + extension);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 
 // EJS şablon motorunu kullanmak için yapılandırma
 app.set('view engine', 'ejs');
@@ -166,19 +182,19 @@ app.get('/dashboard', (req, res) => {
 
 
 // Soru ekleme işlemi
-app.post('/dashboard', (req, res) => {
+app.post('/dashboard', upload.single('resim_yol'),(req, res) => {
   if (!req.session.adminLoggedIn) {
     req.flash('message', 'Önce giriş yapmalısınız.');
     res.redirect('/login');
     return;
   }
 
-  const { subject, difficulty,resim_yol, description, options, correctOption } = req.body;
-
+  const { subject, difficulty,  description, options, correctOption } = req.body;
+  const resim_yol = req.file ? '/uploads/' + req.file.filename : ''; 
   const newQuestion = new Question({
     subject,
     difficulty,
-    resim_yol,
+    resim_yol:resim_yol,
     description,
     options,
     correctOption,
@@ -254,7 +270,6 @@ app.post('/dashboard/update/:id', (req, res) => {
 });
 
 // *********************************************************************************************************************************************
-
 
 
 

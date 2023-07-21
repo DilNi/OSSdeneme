@@ -12,7 +12,7 @@ const questionSchema = new mongoose.Schema({
     },
     resim_yol:{
         type: String,
-    required: true,
+    required: false
     },
     description: {
         type: String,
