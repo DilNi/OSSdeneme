@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
+const multer = require('multer');
 
 // Express uygulamasının oluşturulması
 const app = express();
@@ -172,11 +173,12 @@ app.post('/dashboard', (req, res) => {
     return;
   }
 
-  const { subject, difficulty, description, options, correctOption } = req.body;
+  const { subject, difficulty,resim_yol, description, options, correctOption } = req.body;
 
   const newQuestion = new Question({
     subject,
     difficulty,
+    resim_yol,
     description,
     options,
     correctOption,
@@ -198,7 +200,7 @@ app.post('/dashboard', (req, res) => {
 
 // Soru silme işlemi
 app.post('/dashboard/delete/:id', (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.adminLoggedIn) {
     req.flash('message', 'Önce giriş yapmalısınız.');
     res.redirect('/login');
     return;
@@ -206,7 +208,7 @@ app.post('/dashboard/delete/:id', (req, res) => {
 
   const questionId = req.params.id;
 
-  Question.findOneAndDelete({ _id: questionId, user: req.session.user._id })
+  Question.findOneAndDelete({ _id: questionId, user: req.session.adminLoggedIn._id })
     .then(() => {
       req.flash('message', 'Soru başarıyla silindi.');
       res.redirect('/dashboard');
@@ -220,18 +222,18 @@ app.post('/dashboard/delete/:id', (req, res) => {
 
 // Soru güncelleme işlemi
 app.post('/dashboard/update/:id', (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.adminLoggedIn) {
     req.flash('message', 'Önce giriş yapmalısınız.');
     res.redirect('/login');
     return;
   }
 
   const questionId = req.params.id;
-  const { subject, difficulty, description, options, correctOption } = req.body;
+  const { subject, difficulty,resim_yol, description, options, correctOption } = req.body;
 
   Question.findOneAndUpdate(
-    { _id: questionId, user: req.session.user._id },
-    { subject, difficulty, description,options,correctOption },
+    { _id: questionId, user: req.session.adminLoggedIn._id },
+    { subject, difficulty,resim_yol, description,options,correctOption },
     { new: true }
   )
     .then(question => {
@@ -251,6 +253,13 @@ app.post('/dashboard/update/:id', (req, res) => {
     });
 });
 
+// *********************************************************************************************************************************************
+
+
+
+
+
+// *******************************************************************************************************************************************
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

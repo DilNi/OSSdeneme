@@ -10,6 +10,10 @@ const questionSchema = new mongoose.Schema({
         enum: ['Zor', 'Orta', 'Kolay'],
         required: true
     },
+    resim_yol:{
+        type: String,
+    required: true,
+    },
     description: {
         type: String,
         required: true

@@ -1,11 +1,12 @@
 exports.addQuestion = async (req, res) => {
-  try {
-    const { subject, difficulty, description, options, correctOption } = req.body;
+  try { 
+    const { subject, difficulty, resim_yol, description, options, correctOption } = req.body;
 
     // Soru verilerini kullanarak yeni bir Question nesnesi oluştur
     const newQuestion = new Question({
       subject,
       difficulty,
+      resim_yol,
       description,
       options,
       correctOption,
@@ -22,4 +23,17 @@ exports.addQuestion = async (req, res) => {
     req.flash('message', 'Soru eklerken bir hata oluştu. Lütfen tekrar deneyin.');
     res.redirect('/admin/dashboard');
   }
+};
+// Soruyu sil
+exports.deleteQuestion = (req, res) => {
+  const questionId = req.params.id;
+
+  Ouestion.findOneAndDelete({ _id: questionId, user: req.session.adminLoggedIn })
+    .then(() => {
+      res.redirect('/dashboard');
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send('Sunucu hatası');
+    });
 };
