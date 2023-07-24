@@ -62,6 +62,7 @@ const Question = require('./models/Question');
 
 
 
+
 // Ana sayfa
 app.get('/', (req, res) => {
   res.render('index', { message: req.flash('message') });
@@ -123,6 +124,55 @@ app.post('/login', (req, res) => {
       res.redirect('/login');
     });
 });
+
+
+
+app.get('/quiz', (req, res) => {
+  if (req.session.user) {
+    Question.find({})
+      .then(questions => {
+        const mathQuestions = questions.filter(question => question.subject === 'matematik');
+        const turkishQuestions = questions.filter(question => question.subject === 'turkce');
+        const chemistryQuestions = questions.filter(question => question.subject === 'kimya');
+  
+        res.render('quiz', {
+          user: req.session.user,
+          mathQuestions,
+          turkishQuestions,
+          chemistryQuestions,
+          message: req.flash('message') });
+      })
+      .catch(err => {
+        console.error('Soru çekme hatası:', err);
+        req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
+        res.redirect('/quiz');
+      });
+  } else {
+    req.flash('message', 'Önce giriş yapmalısınız.'); // Giriş yapmadan erişim engelleme
+    res.redirect('/login');
+  }
+});
+
+
+app.get('/quiz', (req, res) => {
+  if (!req.session.user) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
+
+  Question.find({ user: req.session.user._id })
+    .then(questions => {
+      res.render('quiz', { user: req.session.user, questions, message: req.flash('message') });
+    })
+    .catch(err => {
+      console.error('Soru çekme hatası:', err);
+      req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/quiz');
+    });
+});
+
+
 
 // Çıkış işlemi
 app.get('/logout', (req, res) => {
@@ -268,13 +318,46 @@ app.post('/dashboard/update/:id', (req, res) => {
       res.redirect('/dashboard');
     });
 });
+//********************************************************************************************************************* */
+// app.js
 
-// *********************************************************************************************************************************************
+app.get('/quiz', (req, res) => {
+  if (!req.session.user) {
+    req.flash('message', 'Önce giriş yapmalısınız.');
+    res.redirect('/login');
+    return;
+  }
 
+  Question.find({ user: req.session.user._id })
+    .then(questions => {
+      const mathQuestions = questions.filter(question => question.subject === 'matematik');
+      // ... similar filtering for turkishQuestions and chemistryQuestions
 
+      res.render('quiz', {
+        user: req.session.user,
+        mathQuestions,
+        turkishQuestions,
+        chemistryQuestions,
+        message: req.flash('message')
+      });
+    })
+    .catch(err => {
+      console.error('Soru çekme hatası:', err);
+      req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
+      res.redirect('/quiz');
+    });
+});
 
 
 // *******************************************************************************************************************************************
+
+
+
+
+
+
+
+//*************************************************** */
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

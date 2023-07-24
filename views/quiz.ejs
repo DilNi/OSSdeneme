@@ -17,43 +17,115 @@
         <a href="#">Ana Sayfa</a>
         <a href="/quiz">Kısa Sınav</a>
         <a href="/contact.ejs">İletişim</a>
-        <a href="/logout" class="btnLogout">ÇıkıSş Yap</a>
+        <a href="/logout" class="btnLogout">Çıkış Yap</a>
     </nav>
   </div>
-
   <div class="wrapper_2">
     <div class="navbar">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" data-bs-toggle="tab" href="#panel1">Matematik</a>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item " role="presentation">
+          <button class="nav-link active" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab" aria-controls="matematik" aria-selected="true">Matematik</button>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="tab" href="#panel2">Türkçe</a>
+        <li class="nav-item " role="presentation">
+          <button class="nav-link " id="tr-tab" data-bs-toggle="tab" data-bs-target="#tr" type="button" role="tab" aria-controls="turkce" aria-selected="false">Türkçe</button>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="tab" href="#panel3">Kimya</a>
+        <li class="nav-item " role="presentation">
+          <button class="nav-link " id="chem-tab" data-bs-toggle="tab" data-bs-target="#chem" type="button" role="tab" aria-controls="kimya" aria-selected="false">Kimya</button>
         </li>
       </ul>
     </div>
 
     <div class="content">
-      <div class="tab-content">
-        <div class="tab-pane fade show active" id="panel1">
-          <h3>Panel 1 Content</h3>
-          <p>This is the content for Panel 1.</p>
+      <div class="tab-content pt-2" id="myTabContent">
+        <div class="tab-pane fade show active" id="math" role="tabpanel" aria-labelledby="math-tab">
+          <h3>Matematik Soruları</h3>
+          <% if (mathQuestions && mathQuestions.length > 0) { %>
+            <% mathQuestions.forEach((question) => { %>
+              <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                  <% question.options.forEach((option, index) => { %>
+                    <label class="options"><%= option %>
+                      <input type="radio" name="radio" value="<%= index + 1 %>">
+                      <span class="checkmark"></span>
+                    </label>
+                  <% }); %>
+                </div>
+              </div>
+              <div class="d-flex align-items-center pt-3">
+                    <div class="d-flex align-items-center pt-3">
+        <div id="prev">
+            <button class="btn btn-primary">Previous</button>
         </div>
-        <div class="tab-pane fade" id="panel2">
-          <h3>Panel 2 Content</h3>
-          <p>This is the content for Panel 2.</p>
+        <div class="ml-auto mr-sm-5">
+            <button class="btn btn-success">Next</button>
         </div>
-        <div class="tab-pane fade" id="panel3">
-          <h3>Panel 3 Content</h3>
-          <p>This is the content for Panel 3.</p>
+    </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p>Matematik soruları henüz yüklenmedi.</p>
+          <% } %>
+        </div>
+        
+        <div class="tab-pane fade" id="tr" role="tabpanel" aria-labelledby="tr-tab">
+          <h3>Türkçe Soruları</h3>
+          <% if (turkishQuestions && turkishQuestions.length > 0) { %>
+            <% turkishQuestions.forEach((question) => { %>
+              <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                  <% question.options.forEach((option, index) => { %>
+                    <label class="options"><%= option %>
+                      <input type="radio" name="radio" value="<%= index + 1 %>">
+                      <span class="checkmark"></span>
+                    </label>
+                  <% }); %>
+                </div>
+              </div>
+              <div class="d-flex align-items-center pt-3">
+                    <div class="d-flex align-items-center pt-3">
+        <div id="prev">
+            <button class="btn btn-primary">Previous</button>
+        </div>
+        <div class="ml-auto mr-sm-5">
+            <button class="btn btn-success">Next</button>
+        </div>
+    </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p>Türkçe soruları henüz yüklenmedi.</p>
+          <% } %>
+        </div>
+        
+
+        <div class="tab-pane fade" id="chem" role="tabpanel" aria-labelledby="chem-tab">
+          <h3>Kimya Soruları</h3>
+          <% if (chemistryQuestions && chemistryQuestions.length > 0) { %>
+            <% chemistryQuestions.forEach((question) => { %>
+              <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                  <% question.options.forEach((option, index) => { %>
+                    <label class="options"><%= option %>
+                      <input type="radio" name="radio" value="<%= index + 1 %>">
+                      <span class="checkmark"></span>
+                    </label>
+                  <% }); %>
+                </div>
+              </div>
+              <div class="d-flex align-items-center pt-3">
+                <!-- Previous ve Next butonları -->
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p>Kimya soruları henüz yüklenmedi.</p>
+          <% } %>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Add Bootstrap JS script here -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
