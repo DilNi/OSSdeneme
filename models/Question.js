@@ -10,9 +10,9 @@ const questionSchema = new mongoose.Schema({
         enum: ['Zor', 'Orta', 'Kolay'],
         required: true
     },
-    resim_yol:{
-        type: String,
-    required: false
+    resim_yol: {
+        data: Buffer, // Tampon türü ile resim verisini saklayacak alan
+        contentType: String // Resim dosyasının türünü belirten alan (örn. 'image/png', 'image/jpeg' vb.)
     },
     description: {
         type: String,

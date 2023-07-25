@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const multer = require('multer');
+const fs = require('fs');
 
 // Express uygulamasının oluşturulması
 const app = express();
@@ -34,7 +35,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, "public")));
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
-
+app.use(express.json({limit: '25mb'}));
+app.use(express.urlencoded({limit: '25mb', extended: true}));
 // express-session'ın yapılandırılması
 app.use(session({
   secret: 'gizli_anahtar',
@@ -241,10 +243,19 @@ app.post('/dashboard', upload.single('resim_yol'),(req, res) => {
 
   const { subject, difficulty,  description, options, correctOption } = req.body;
   const resim_yol = req.file ? '/uploads/' + req.file.filename : ''; 
+  let resim_yol_data;
+  let contentType;
+  if (req.file) {
+    resim_yol_data = fs.readFileSync(req.file.path);
+    contentType = req.file.mimetype;
+  }
   const newQuestion = new Question({
     subject,
     difficulty,
-    resim_yol:resim_yol,
+    resim_yol: {
+      data: resim_yol_data,
+      contentType: contentType
+    },
     description,
     options,
     correctOption,
