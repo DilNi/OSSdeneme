@@ -124,6 +124,7 @@
           <h2>Kaydedilen Sorular</h2>
           <div id="accordion">
             <% const itemsPerPage=5; // Her sayfada gösterilecek öğe sayısı %>
+            <% const choices = ['A', 'B', 'C', 'D', 'E']; %>
               <% for (let index=0; index < questions.length; index++) { %>
                 <div class="card <%= index >= itemsPerPage ? 'd-none' : '' %>"
                   data-page="<%= Math.ceil((index + 1) / itemsPerPage) %>">
@@ -144,23 +145,28 @@
                       <p><strong>Zorluk:</strong>
                         <%= questions[index].difficulty %>
                       </p>
-                      <p><strong>Resim:</strong>
-                        <%= questions[index].resim_yol %>
-                      </p>
+                    
+                      <p><strong>Resim:</strong></p>
+                      <% if (questions[index].resim_yol && questions[index].resim_yol.data) { %>
+                        <img src="data:<%= questions[index].resim_yol.contentType %>;base64,<%= questions[index].resim_yol.data.toString('base64') %>"
+                          alt="Resim" style="max-width: 100%; height: auto;">
+                      <% } else { %>
+                        <p>Resim yok.</p>
+                      <% } %>
+                      
+                      
                       <p><strong>Soru:</strong>
                         <%= questions[index].description %>
                       </p>
                       <p><strong>Seçenekler:</strong></p>
                       <ul>
-                        <% questions[index].options.forEach((option)=> { %>
+                        <% questions[index].options.forEach((option, optionIndex) => { %>
                           <li>
-                            <%= option %>
+                            <%= choices[optionIndex] %>) <%= option %>
                           </li>
                           <% }); %>
                       </ul>
-                      <p><strong>Doğru Seçenek:</strong>
-                        <%= questions[index].correctOption %>
-                      </p>
+                      <p><strong>Doğru Seçenek:</strong> <%= choices[questions[index].correctOption - 1] %></p>
                       <form action="/dashboard/delete/<%= questions[index]._id %>" method="POST"
                         style="display: inline;">
                         <button type="submit" class="btn btn-danger rounded-pill">Sil</button>
@@ -202,17 +208,14 @@
                               </select>
                             </div>
                           </div>
-
-                          <!-- Resim yükleme alanı -->
-                          <div class="row mb-3">
-                            <label for="updatedResim_yol" class="col-sm-2 col-form-label">Resim Güncelle:</label>
-                            <div class="col-sm-7">
-                              <input type="file" class="form-control" name="resim_yol" id="updatedResim_yol"
-                                accept="image/*">
-                            </div>
-                          </div>
-
-
+<!-- Resim güncelleme -->
+<div class="row mb-3">
+  <label for="resim_yol" class="col-sm-2 col-form-label">Resim Güncelle:</label>
+  <div class="col-sm-7">
+    <input type="file" class="form-control" name="resim_yol" id="resim_yol" accept="image/*">
+  </div>
+</div>
+<input type="hidden" name="currentResim_yol" value="<%= questions[index].resim_yol %>">
 
 
                           <!-- Soruyu güncelleme -->
