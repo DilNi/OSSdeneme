@@ -1,134 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('includes/head.ejs') %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <!-- Add Bootstrap CSS link here -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
-</head>
+<%- include('includes/nav.ejs') %>
 
-<body>
-  <div class="header">
-    <h2 class="logo">Logo</h2>
-    <nav class="navigation">
-        <a href="#">Ana Sayfa</a>
-        <a href="/quiz">Kısa Sınav</a>
-        <a href="/contact.ejs">İletişim</a>
-        <a href="/logout" class="btnLogout">Çıkış Yap</a>
-    </nav>
-  </div>
+
+
+
   <div class="wrapper_2">
-    <div class="navbar">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item " role="presentation">
-          <button class="nav-link active" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button" role="tab" aria-controls="matematik" aria-selected="true">Matematik</button>
-        </li>
-        <li class="nav-item " role="presentation">
-          <button class="nav-link " id="tr-tab" data-bs-toggle="tab" data-bs-target="#tr" type="button" role="tab" aria-controls="turkce" aria-selected="false">Türkçe</button>
-        </li>
-        <li class="nav-item " role="presentation">
-          <button class="nav-link " id="chem-tab" data-bs-toggle="tab" data-bs-target="#chem" type="button" role="tab" aria-controls="kimya" aria-selected="false">Kimya</button>
-        </li>
-      </ul>
-    </div>
+   BURADA KULLANICININ SKORLARI TUTULACAK?
+    <!-- <div class="content">
 
-    <div class="content">
+
+
       <div class="tab-content pt-2" id="myTabContent">
         <div class="tab-pane fade show active" id="math" role="tabpanel" aria-labelledby="math-tab">
           <h3>Matematik Soruları</h3>
-          <% if (mathQuestions && mathQuestions.length > 0) { %>
-            <% mathQuestions.forEach((question) => { %>
+          <% if (mathQuestions && mathQuestions.length> 0) { %>
+            <% mathQuestions.forEach((question)=> { %>
               <div class="question ml-sm-5 pl-sm-5 pt-2">
-                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
-                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                  <% question.options.forEach((option, index) => { %>
-                    <label class="options"><%= option %>
-                      <input type="radio" name="radio" value="<%= index + 1 %>">
-                      <span class="checkmark"></span>
-                    </label>
-                  <% }); %>
+                <% if (question.resim_yol && question.resim_yol.data) { %>
+                  <img
+                    src="data:<%= question.resim_yol.contentType %>;base64,<%= question.resim_yol.data.toString('base64') %>"
+                    alt="Resim" style="max-width: 60%; height: auto;">
+                  <% } %>
+                    <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                      <% question.options.forEach((option, index)=> { %>
+                        <label class="options">
+                          <%= option %>
+                            <input type="radio" name="radio" value="<%= index + 1 %>">
+                            <span class="checkmark"></span>
+                        </label>
+                        <% }); %>
+                    </div>
+              </div>
+
+
+              <div class="d-flex align-items-center pt-3">
+                <div class="d-flex align-items-center pt-3">
+                  <div id="prev">
+                    <button class="btn btn-primary">Previous</button>
+                  </div>
+                  <div class="ml-auto mr-sm-5">
+                    <button class="btn btn-success">Next</button>
+                  </div>
                 </div>
               </div>
-              <div class="d-flex align-items-center pt-3">
-                    <div class="d-flex align-items-center pt-3">
-        <div id="prev">
-            <button class="btn btn-primary">Previous</button>
+              <% }); %>
+                <% } else { %>
+                  <p>Matematik soruları henüz yüklenmedi.</p>
+                  <% } %>
         </div>
-        <div class="ml-auto mr-sm-5">
-            <button class="btn btn-success">Next</button>
-        </div>
-    </div>
-              </div>
-            <% }); %>
-          <% } else { %>
-            <p>Matematik soruları henüz yüklenmedi.</p>
-          <% } %>
-        </div>
-        
+
         <div class="tab-pane fade" id="tr" role="tabpanel" aria-labelledby="tr-tab">
+          <div class="difficulty-selection">
+            <label for="difficulty">Zorluk Seviyesi Seçin:</label>
+            <select id="difficulty">
+              <option value="Kolay">Kolay</option>
+              <option value="Orta">Orta</option>
+              <option value="Zor">Zor</option>
+            </select>
+            <button id="loadQuestionsBtn" class="btn btn-primary">Soruları Yükle</button>
+          </div>
           <h3>Türkçe Soruları</h3>
-          <% if (turkishQuestions && turkishQuestions.length > 0) { %>
-            <% turkishQuestions.forEach((question) => { %>
+          <% if (turkishQuestions && turkishQuestions.length> 0) { %>
+            <% turkishQuestions.forEach((question, index)=> { %>
               <div class="question ml-sm-5 pl-sm-5 pt-2">
-                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
-                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                  <% question.options.forEach((option, index) => { %>
-                    <label class="options"><%= option %>
-                      <input type="radio" name="radio" value="<%= index + 1 %>">
-                      <span class="checkmark"></span>
-                    </label>
-                  <% }); %>
-                </div>
+                <% if (question.resim_yol && question.resim_yol.data) { %>
+                  <img
+                    src="data:<%= question.resim_yol.contentType %>;base64,<%= question.resim_yol.data.toString('base64') %>"
+                    alt="Resim" style="max-width: 60%; height: auto;">
+                  <% } %>
+                    <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                      <% question.options.forEach((option, index)=> { %>
+                        <label class="options">
+                          <%= option %>
+                            <input type="radio" name="radio" value="<%= index + 1 %>">
+                            <span class="checkmark"></span>
+                        </label>
+                        <% }); %>
+                    </div>
               </div>
               <div class="d-flex align-items-center pt-3">
-                    <div class="d-flex align-items-center pt-3">
-        <div id="prev">
-            <button class="btn btn-primary">Previous</button>
-        </div>
-        <div class="ml-auto mr-sm-5">
-            <button class="btn btn-success">Next</button>
-        </div>
-    </div>
+                <div class="d-flex align-items-center pt-3">
+                  <div id="prev">
+                    <button class="btn btn-primary">Previous</button>
+                  </div>
+                  <div class="ml-auto mr-sm-5">
+                    <button class="btn btn-success">Next</button>
+                  </div>
+                </div>
               </div>
-            <% }); %>
-          <% } else { %>
-            <p>Türkçe soruları henüz yüklenmedi.</p>
-          <% } %>
+              <% }); %>
+                <% } else { %>
+                  <p>Türkçe soruları henüz yüklenmedi.</p>
+                  <% } %>
         </div>
-        
+
 
         <div class="tab-pane fade" id="chem" role="tabpanel" aria-labelledby="chem-tab">
+          <div class="difficulty-selection">
+            <label for="difficulty">Zorluk Seviyesi Seçin:</label>
+            <select id="difficulty">
+              <option value="Kolay">Kolay</option>
+              <option value="Orta">Orta</option>
+              <option value="Zor">Zor</option>
+            </select>
+            <button id="loadQuestionsBtn" class="btn btn-primary">Soruları Yükle</button>
+          </div>
           <h3>Kimya Soruları</h3>
-          <% if (chemistryQuestions && chemistryQuestions.length > 0) { %>
-            <% chemistryQuestions.forEach((question) => { %>
+          <% if (chemistryQuestions && chemistryQuestions.length> 0) { %>
+            <% chemistryQuestions.forEach((question)=> { %>
               <div class="question ml-sm-5 pl-sm-5 pt-2">
-                <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
-                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                  <% question.options.forEach((option, index) => { %>
-                    <label class="options"><%= option %>
-                      <input type="radio" name="radio" value="<%= index + 1 %>">
-                      <span class="checkmark"></span>
-                    </label>
-                  <% }); %>
-                </div>
+                <% if (question.resim_yol && question.resim_yol.data) { %>
+                  <img
+                    src="data:<%= question.resim_yol.contentType %>;base64,<%= question.resim_yol.data.toString('base64') %>"
+                    alt="Resim" style="max-width: 60%; height: auto;">
+                  <% } %>
+                    <div class="py-2 h5"><b>Q. <%= question.description %></b></div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                      <% question.options.forEach((option, index)=> { %>
+                        <label class="options">
+                          <%= option %>
+                            <input type="radio" name="radio" value="<%= index + 1 %>">
+                            <span class="checkmark"></span>
+                        </label>
+                        <% }); %>
+                    </div>
               </div>
               <div class="d-flex align-items-center pt-3">
                 <!-- Previous ve Next butonları -->
-              </div>
-            <% }); %>
-          <% } else { %>
-            <p>Kimya soruları henüz yüklenmedi.</p>
-          <% } %>
+              <!-- </div>
+              <% }); %>
+                <% } else { %>
+                  <p>Kimya soruları henüz yüklenmedi.</p>
+                  <% } %>
         </div>
-      </div>
-    </div>
-  </div>
+      </div> -->
+    <!-- </div>
+  </div> -->
 
   <!-- Add Bootstrap JS script here -->
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+
+
+
+
+
+
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadQuestionsBtn = document.getElementById('loadQuestionsBtn');
+    
+      function fetchQuestions(difficulty) {
+        fetch(`/api/questions?difficulty=${difficulty}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Sunucudan geçersiz yanıt alındı.');
+            }
+            // JSON verisini döndürün
+            return response.json();
+          })
+          .then((data) => {
+            // Gelen veriyi kullanarak güncellemeler yapın
+            updateTabContent('math', data); // data, istenen soruları içerir
+            updateTabContent('tr', data);
+            updateTabContent('chem', data);
+          })
+          .catch((error) => {
+            console.error('Hata oluştu:', error);
+          });
+      }
+    
+      loadQuestionsBtn.addEventListener('click', function () {
+        const selectedDifficulty = document.getElementById('difficulty').value;
+        fetchQuestions(selectedDifficulty);
+      });
+    
+      function updateTabContent(subject, questions) {
+        const tabContent = document.getElementById(subject);
+        tabContent.innerHTML = '';
+    
+        if (questions && questions.length > 0) {
+          questions.forEach((question) => {
+            // Soruların listesi oluşturulacak
+            const questionElement = document.createElement('div');
+            // Soru içeriğini, seçenekleri ve diğer detayları burada oluşturun
+            questionElement.innerHTML = `
+              <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b>Q. ${question.description}</b></div>
+                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                  ${question.options.map((option, index) => `
+                    <label class="options">
+                      ${option}
+                      <input type="radio" name="radio" value="${index + 1}">
+                      <span class="checkmark"></span>
+                    </label>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+            tabContent.appendChild(questionElement);
+          });
+        } else {
+          const notLoadedMessage = document.createElement('p');
+          notLoadedMessage.textContent = 'Sorular henüz yüklenmedi.';
+          tabContent.appendChild(notLoadedMessage);
+        }
+      }
+    });
+  </script>
+  
 </body>
 
 </html>
