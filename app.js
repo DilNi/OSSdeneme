@@ -333,13 +333,23 @@ app.get('/getMathQuestions', async (req, res) => {
   try {
     const { difficulty } = req.query;
     const mathQuestions = await Question.find({ subject: 'matematik', difficulty: difficulty });
-    res.json({ mathQuestions });
+
+    // Resim verilerini Base64 formatında JSON'a çeviriyoruz
+    const questionsWithImages = mathQuestions.map((question) => {
+      const base64Data = question.resim_yol.data.toString('base64');
+      const resim_yol = {
+        contentType: question.resim_yol.contentType,
+        data: base64Data,
+      };
+      return { ...question.toObject(), resim_yol };
+    });
+
+    res.json({ mathQuestions: questionsWithImages });
   } catch (err) {
     console.error('Hata:', err);
     res.status(500).json({ message: 'Bir hata oluştu' });
   }
 });
-
 
 
 

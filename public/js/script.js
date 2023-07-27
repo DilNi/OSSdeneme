@@ -29,91 +29,80 @@ btn1.addEventListener('click', () => {
 });
 
 
-//*********************************************************************************************** */
-// // quiz.js
-// document.addEventListener('DOMContentLoaded', function () {
-//   const loadQuestionsBtn = document.getElementById('loadQuestionsBtn');
-
-//   function fetchMathQuestions(difficulty) {
-//     fetch(`/api/questions/math?difficulty=${difficulty}`)
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error('Sunucudan geçersiz yanıt alındı.');
-//         }
-//         // JSON verisini döndürün
-//         return response.json();
-//       })
-//       .then((data) => {
-//         // Sadece matematik sorularını güncelleyin
-//         updateTabContent('math', data);
-//       })
-//       .catch((error) => {
-//         console.error('Hata oluştu:', error);
-//       });
-//   }
-
-//   loadQuestionsBtn.addEventListener('click', function () {
-//     const selectedDifficulty = document.getElementById('difficulty').value;
-//     fetchMathQuestions(selectedDifficulty);
-//   });
-
-//   function updateTabContent(subject, questions) {
-//     const tabContent = document.getElementById(subject);
-//     tabContent.innerHTML = '';
-
-//     if (questions && questions.length > 0) {
-//       questions.forEach((question) => {
-//         // Soruların listesi oluşturulacak
-//         const questionElement = document.createElement('div');
-//         // Soru içeriğini, seçenekleri ve diğer detayları burada oluşturun
-//         questionElement.innerHTML = `
-//           <div class="question ml-sm-5 pl-sm-5 pt-2">
-//             <div class="py-2 h5"><b>Q. ${question.description}</b></div>
-//             <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-//               ${question.options.map((option, index) => `
-//                 <label class="options">
-//                   ${option}
-//                   <input type="radio" name="radio" value="${index + 1}">
-//                   <span class="checkmark"></span>
-//                 </label>
-//               `).join('')}
-//             </div>
-//           </div>
-//         `;
-//         tabContent.appendChild(questionElement);
-//       });
-//     } else {
-//       const notLoadedMessage = document.createElement('p');
-//       notLoadedMessage.textContent = 'Sorular henüz yüklenmedi.';
-//       tabContent.appendChild(notLoadedMessage);
-//     }
-//   }
-// });
-
-
-
-
+//matematik için script-------------------------------------------------
+let currentIndex = 0; // Mevcut soru dizini
+let mathQuestions = []; // Soruları tutacak dizi
 
 const loadQuestionsBtn = document.getElementById('loadQuestionsBtn');
+const difficultyContainer = document.getElementById('difficultyContainer');
+const questionsContainer = document.getElementById('questionsContainer');
 loadQuestionsBtn.addEventListener('click', async () => {
     const difficulty = document.getElementById('difficulty').value;
     try {
         const response = await fetch(`/getMathQuestions?difficulty=${difficulty}`);
         const data = await response.json();
-        const mathQuestions = data.mathQuestions;
+        mathQuestions = data.mathQuestions;
 
-        const questionsContainer = document.getElementById('questionsContainer');
-        questionsContainer.innerHTML = ''; // Önceki soruları temizle
-
-        mathQuestions.forEach(question => {
-            // Soruları burada listeleme işlemi yapabilirsiniz
-            const questionDiv = document.createElement('div');
-            questionDiv.textContent = question.description;
-            questionsContainer.appendChild(questionDiv);
-        });
+        // Başlangıçta ilk soruyu göster
+        currentIndex = 0;
+        showQuestion(currentIndex);
+        // Zorluk seçme kısmını gizle, soruların listelendiği bölümü göster
+        difficultyContainer.style.display = 'none';
+        questionsContainer.style.display = 'block';
     } catch (err) {
         console.error('Hata:', err);
     }
 });
+function showQuestion(index) {
+    const questionsContainer = document.getElementById('questionsContainer');
+    questionsContainer.innerHTML = ''; // Önceki soruyu temizle
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+    const question = mathQuestions[index];
+
+    const questionTemplate = document.getElementById('questionTemplate').cloneNode(true);
+    questionTemplate.style.display = 'block';
+
+    const questionDescription = questionTemplate.querySelector('.questionDescription');
+    questionDescription.textContent = question.description;
+
+    const optionsContainer = questionTemplate.querySelector('.ml-md-3');
+    optionsContainer.innerHTML = '';
+    question.options.forEach((option, idx) => {
+        const label = document.createElement('label');
+        label.className = 'options';
+        label.innerHTML = `
+<span class="optionText">${option}</span>
+<input type="radio" name="radio" value="${idx}">
+<span class="checkmark"></span>
+`;
+        optionsContainer.appendChild(label);
+    });
+
+    const questionImage = questionTemplate.querySelector('#questionImage');
+    // Soruya ait resim varsa, questionImage src'sine resim yolu ekleyin.
+    if (question.resim_yol && question.resim_yol.data) {
+        questionImage.src = `data:${question.resim_yol.contentType};base64,${question.resim_yol.data.toString('base64')}`;
+    } else {
+        // Soruya ait resim yoksa, resim alanını gizleyin.
+        questionImage.style.display = 'none';
+    }
+
+    questionsContainer.appendChild(questionTemplate);
+}
+
+
+
+function navigateQuestion(direction) {
+    currentIndex += direction;
+    if (currentIndex < 0) {
+        currentIndex = 0;
+    } else if (currentIndex >= mathQuestions.length) {
+        currentIndex = mathQuestions.length - 1;
+    }
+    showQuestion(currentIndex);
+}
+
+//**------------------------------------------------------------------------- */
+
+
+//türkçe için script *--------------------------------------------------------------
