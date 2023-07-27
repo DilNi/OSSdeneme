@@ -328,23 +328,26 @@ app.get('/user/chem', (req, res) => {
   res.render('user/chem');
 });
 
-
-app.get('/getMathQuestions', async (req, res) => {
+app.get('/getQuestions', async (req, res) => {
   try {
-    const { difficulty } = req.query;
-    const mathQuestions = await Question.find({ subject: 'matematik', difficulty: difficulty });
+    const { subject, difficulty } = req.query;
+    const questions = await Question.find({ subject, difficulty });
 
     // Resim verilerini Base64 formatında JSON'a çeviriyoruz
-    const questionsWithImages = mathQuestions.map((question) => {
-      const base64Data = question.resim_yol.data.toString('base64');
-      const resim_yol = {
-        contentType: question.resim_yol.contentType,
-        data: base64Data,
-      };
-      return { ...question.toObject(), resim_yol };
+    const questionsWithImages = questions.map((question) => {
+      if (question.resim_yol && question.resim_yol.data) {
+        const base64Data = question.resim_yol.data.toString('base64');
+        const resim_yol = {
+          contentType: question.resim_yol.contentType,
+          data: base64Data,
+        };
+        return { ...question.toObject(), resim_yol };
+      } else {
+        return question.toObject();
+      }
     });
 
-    res.json({ mathQuestions: questionsWithImages });
+    res.json({ questions: questionsWithImages });
   } catch (err) {
     console.error('Hata:', err);
     res.status(500).json({ message: 'Bir hata oluştu' });
