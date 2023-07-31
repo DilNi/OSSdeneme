@@ -459,8 +459,18 @@ body{
     font-weight: 500;
     margin: 25px 0 10px;
   }
+  .navigation-buttons {
+    margin-top: 20px;
+    display: flex; /* Change display to flex */
+    justify-content: space-between; /* Add this to separate the buttons */
+  }
   
+  .navigation-buttons button {
+    /* Remove the 'display: block;' property from here, as it's not needed for flexbox */
+    margin-top: 5px;
+  }
   
+
 
 .login.register{
     font-size: .9em;

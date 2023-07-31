@@ -1,23 +1,52 @@
 <%- include('../includes/head.ejs') %>
-    <%- include('../includes/nav.ejs') %>
+<%- include('../includes/nav.ejs') %>
 
-        <div class="wrapper_2">
-            <div class="difficulty-selection">
-                <label for="difficulty">Zorluk Seviyesi Seçin:</label>
-                <select id="difficulty">
-                  <option value="Kolay">Kolay</option>
-                  <option value="Orta">Orta</option>
-                  <option value="Zor">Zor</option>
-                </select>
-                <button id="loadQuestionsBtn" class="btn btn-primary">Soruları Yükle</button>
-              </div>
-        </div>
+<div class="wrapper_2">
+  <div class="difficulty-selection" id="difficultyContainer">
+    <label for="difficulty">Zorluk Seviyesi Seçin:</label>
+    <select id="difficulty">
+      <option value="Kolay">Kolay</option>
+      <option value="Orta">Orta</option>
+      <option value="Zor">Zor</option>
+    </select>
+    <button id="loadQuestionsBtn" class="btn btn-primary">Soruları Yükle</button>
+  </div>
+  <div id="questionsContainer">
+    <!-- Sorular burada listelenecek -->
+  </div>
+  <div class="navigation-buttons"  style="display: none;">
+    <button id="prevQuestionBtn" class="btn btn-secondary">Geri</button>
+    <button id="nextQuestionBtn" class="btn btn-primary">İleri</button>
+  </div>
+  
+</div>
+
+<div id="questionTemplate" style="display: none;">
+  <div class="container mt-sm-5 my-1">
+    <div class="question ml-sm-5 pl-sm-5 pt-2">
+      <!-- questionTemplate içerisine resim için bir img elementi ekleyin -->
+      <img src="" alt="Soru Resmi" style="max-width: 60%; height: auto;" id="questionImage">
+
+      <div class="py-2 h5"><b>Q. <span class="questionDescription"></span></b></div>
+      <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+        <label class="options"><span class="optionText"></span>
+          <input type="radio" name="radio">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+   
+    </div>
+
+  </div>
+</div>
+
+<script src="/js/script.js">
+    
+</script>
+<script>
+  loadQuestionsForSubject('kimya');
+</script>
 
 
-
-
-
-
-        </body>
-
-        </html>
+</body>
+</html>
