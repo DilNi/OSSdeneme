@@ -1,3 +1,4 @@
+
 async function loadQuestionsForSubject(subject) {
   let currentIndex = 0; // Mevcut soru dizini
   let questions = []; // Soruları tutacak dizi
@@ -19,6 +20,9 @@ async function loadQuestionsForSubject(subject) {
       const response = await fetch(`/getQuestions?subject=${subject}&difficulty=${difficulty}`);
       const data = await response.json();
       questions = data.questions;
+      // random 3 soru seçiyor
+      questions = _.shuffle(questions);
+      questions = questions.slice(0, 3);
 
       // Başlangıçta ilk soruyu göster
       currentIndex = 0;
