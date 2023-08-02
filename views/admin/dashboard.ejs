@@ -79,8 +79,8 @@
                 <input type="text" class="form-control" name="options[]" id="option5" required>
               </div>
             </div>
-            <label for="correctOption">Doğru şıkkı seçin (1-5 arası bir sayı girin):</label><br>
-            <input type="number" id="correctOption" name="correctOption" required min="1" max="5"><br>
+            <label for="correctOption">Doğru şıkkı seçin (0-4 arası bir sayı girin):</label><br>
+            <input type="number" id="correctOption" name="correctOption" required min="0" max="4"><br>
             <br>
 
             <div class="row mb-3">
@@ -104,7 +104,7 @@
                     <h5 class="mb-0">
                       <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%= index %>"
                         aria-expanded="true" aria-controls="collapse<%= index %>">
-                        Soru #<%= index + 1 %>: <%= questions[index]._id %> - <%= questions[index].subject %>
+                        Soru #<%= index + 1 %>:  <%= questions[index].subject %>
                       </button>
                     </h5>
                   </div>
@@ -138,7 +138,7 @@
                           </li>
                           <% }); %>
                       </ul>
-                      <p><strong>Doğru Seçenek:</strong> <%= choices[questions[index].correctOption - 1] %></p>
+                      <p><strong>Doğru Seçenek:</strong> <%= choices[questions[index].correctOption ] %></p>
                       <form action="/dashboard/delete/<%= questions[index]._id %>" method="POST"
                         style="display: inline;">
                         <button type="submit" class="btn btn-danger rounded-pill">Sil</button>
@@ -246,10 +246,10 @@
                           </div>
 
                           <!-- doğru şıkkı güncelle -->
-                          <label for="UpdatedcorrectOption">Doğru şıkkı güncelle (1-5 arası
+                          <label for="UpdatedcorrectOption">Doğru şıkkı güncelle (0-4 arası
                             bir sayı girin):</label><br>
                           <input type="number" id="UpdatedcorrectOption" name="correctOption"
-                            value="<%= questions[index].correctOption %>" required min="1" max="5"><br>
+                            value="<%= questions[index].correctOption %>" required min="0" max="4"><br>
                           <br>
                           <div class="row mb-3">
                             <div class="col-sm-10 offset-sm-2">

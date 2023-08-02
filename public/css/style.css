@@ -338,6 +338,32 @@ body{
 
 
 }
+.result-popup {
+  color:#012970;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border:2px solid rgba(255,255,255,.5);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0,0,0,.5);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  display: none;
+}
+
+.result-popup.show {
+  display: block;
+}
+
+.options {
+  display: block;
+  margin-bottom: 10px; /* İstediğiniz boşluk değerini buradan ayarlayabilirsiniz */
+}
+
+
 
 .form-box h2 {
     font-size:2em;

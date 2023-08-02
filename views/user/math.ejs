@@ -17,6 +17,11 @@
   <div class="navigation-buttons"  style="display: none;">
     <button id="prevQuestionBtn" class="btn btn-secondary">Geri</button>
     <button id="nextQuestionBtn" class="btn btn-primary">İleri</button>
+    <!-- Bitir butonu için eklenen kısım -->
+<button id="finishBtn" class="btn btn-primary" style="display: none;">Bitir</button>
+
+    
+    
   </div>
   
 </div>
@@ -38,7 +43,21 @@
     </div>
 
   </div>
+  
 </div>
+
+<div class="result-popup" style="display: none;">
+  <h2>Quiz Sonucu</h2>
+  <p>Doğru Cevap Sayısı: <span id="correctCount"></span></p>
+  <p>Yanlış Cevap Sayısı: <span id="incorrectCount"></span></p>
+  <p>Toplam Puan: <span id="totalScore"></span></p>
+  <h3>Doğru Cevaplar:</h3>
+  <ul id="correctAnswersList">
+    <!-- Doğru cevaplar burada listelenecek -->
+  </ul>
+  <button id="closePopupBtn" class="btn btn-primary">Kapat</button>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
 <script src="/js/script.js">
     

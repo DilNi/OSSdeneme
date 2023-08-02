@@ -31,8 +31,8 @@ const questionSchema = new mongoose.Schema({
     correctOption: {
         type: Number,
         required: true,
-        min: 1,
-        max: 5
+        min: 0,
+        max: 4
     }
 });
 
