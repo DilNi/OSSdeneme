@@ -9,11 +9,24 @@
       <option value="Orta">Orta</option>
       <option value="Zor">Zor</option>
     </select>
-    <button id="loadQuestionsBtn" class="btn btn-primary">Soruları Yükle</button>
+    <button id="loadQuestionsBtn" class="btn btn-load">Soruları Yükle</button>
+  </div>
+  <div class="questions-answer-container"  >
+    <div class="timer" style="display: none;" >
+      <!-- Kullanıcının cevaplarını göreceği kutucuklar burada yer alacak -->
   </div>
   <div id="questionsContainer">
     <!-- Sorular burada listelenecek -->
+    
   </div>
+ 
+  
+  <div class="answers" style="display: none;" >
+    
+    <!-- Kullanıcının cevaplarını göreceği kutucuklar burada yer alacak -->
+    <button id="clearSelectionBtn" class="btn btn-primary">Seçimi Temizle</button>
+</div>
+</div>
   <div class="navigation-buttons"  style="display: none;">
     <button id="prevQuestionBtn" class="btn btn-secondary">Geri</button>
     <button id="nextQuestionBtn" class="btn btn-primary">İleri</button>
@@ -34,10 +47,8 @@
 
       <div class="py-2 h5"><b>currentIndex <span class="questionDescription"></span></b></div>
       <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-        <label class="options"><span class="optionText"></span>
-          <input type="radio" name="radio">
-          <span class="checkmark"></span>
-        </label>
+        
+
       </div>
    
     </div>
@@ -46,16 +57,24 @@
   
 </div>
 
-<div class="result-popup" style="display: none;">
-  <h2>Quiz Sonucu</h2>
-  <p>Doğru Cevap Sayısı: <span id="correctCount"></span></p>
-  <p>Yanlış Cevap Sayısı: <span id="incorrectCount"></span></p>
-  <p>Toplam Puan: <span id="totalScore"></span></p>
-  <h3>Doğru Cevaplar:</h3>
-  <ul id="correctAnswersList">
-    <!-- Doğru cevaplar burada listelenecek -->
-  </ul>
-  <button id="closePopupBtn" class="btn btn-primary">Kapat</button>
+<div id="popup" class="popup"  style="display: none;">
+  <div class="popup-content">
+    <span class="close">&times;</span>
+    <div id="scoreForm">
+      <table id="scoreTable" class="table">
+        <thead>
+          <tr>
+            <th>Soru</th>
+            <th>Durum</th>
+            <th>Doğru Cevap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Score results will be added here dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
