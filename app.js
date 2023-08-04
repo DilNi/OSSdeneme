@@ -225,8 +225,8 @@ app.post('/dashboard', upload.single('resim_yol'),(req, res) => {
 
   const { subject, difficulty,  description, options, correctOption } = req.body;
   const resim_yol = req.file ? '/uploads/' + req.file.filename : ''; 
-  let resim_yol_data;
-  let contentType;
+  let resim_yol_data = null;
+  let contentType = null; 
   if (req.file) {
     resim_yol_data = fs.readFileSync(req.file.path);
     contentType = req.file.mimetype;
