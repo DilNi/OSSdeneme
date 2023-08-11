@@ -96,177 +96,192 @@
           <h2>Kaydedilen Sorular</h2>
           <div id="accordion">
             <% const itemsPerPage=5; // Her sayfada gösterilecek öğe sayısı %>
-            <% const choices = ['A', 'B', 'C', 'D', 'E']; %>
-              <% for (let index=0; index < questions.length; index++) { %>
-                <div class="card <%= index >= itemsPerPage ? 'd-none' : '' %>"
-                  data-page="<%= Math.ceil((index + 1) / itemsPerPage) %>">
-                  <div class="card-header" id="heading<%= index %>">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%= index %>"
-                        aria-expanded="true" aria-controls="collapse<%= index %>">
-                        Soru #<%= index + 1 %>:  <%= questions[index].subject %>
-                      </button>
-                    </h5>
-                  </div>
-                  <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>"
-                    data-parent="#accordion">
-                    <div class="card-body">
-                      <p><strong>Ders:</strong>
-                        <%= questions[index].subject %>
-                      </p>
-                      <p><strong>Zorluk:</strong>
-                        <%= questions[index].difficulty %>
-                      </p>
-                    
-                      <p><strong>Resim:</strong></p>
-                      <% if (questions[index].resim_yol && questions[index].resim_yol.data) { %>
-                        <img src="data:<%= questions[index].resim_yol.contentType %>;base64,<%= questions[index].resim_yol.data.toString('base64') %>"
-                          alt="Resim" style="max-width: 100%; height: auto;">
-                      <% } else { %>
-                        <p>Resim yok.</p>
-                      <% } %>
-                      
-                      
-                      <p><strong>Soru:</strong>
-                        <%= questions[index].description %>
-                      </p>
-                      <p><strong>Seçenekler:</strong></p>
-                      <ul>
-                        <% questions[index].options.forEach((option, optionIndex) => { %>
-                          <li>
-                            <%= choices[optionIndex] %>) <%= option %>
-                          </li>
-                          <% }); %>
-                      </ul>
-                      <p><strong>Doğru Seçenek:</strong> <%= choices[questions[index].correctOption ] %></p>
-                      <form action="/dashboard/delete/<%= questions[index]._id %>" method="POST"
-                        style="display: inline;">
-                        <button type="submit" class="btn btn-danger rounded-pill">Sil</button>
-                      </form>
-                      <a href="#" onclick="toggleEditForm('<%= questions[index]._id %>')"
-                        class="btn btn-success rounded-pill">Güncelle</a>
-                      <div id="edit-form-<%= questions[index]._id %>" style="display: none;">
-                        <form action="/dashboard/update/<%= questions[index]._id %>" method="POST">
-                          <!-- Ders güncelleme -->
-                          <div class="row mb-3">
-                            <label for="updatedSubject" class="col-sm-2 col-form-label">Ders
-                              Güncelle:</label>
-                            <div class="col-sm-10">
-                              <select class="form-select" name="subject" id="updatedSubject" required>
-                                <option value="matematik" <%=questions[index].subject==='matematik' ? 'selected' : '' %>
-                                  >Matematik</option>
-                                <option value="turkce" <%=questions[index].subject==='turkce' ? 'selected' : '' %>
-                                  >Türkçe
-                                </option>
-                                <option value="kimya" <%=questions[index].subject==='kimya' ? 'selected' : '' %>>Kimya
-                                </option>
-                                <option value="biyoloji" <%=questions[index].subject==='biyoloji' ? 'selected' : '' %>
-                                  >Biyoloji
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-                          <!-- Soru zorluğu güncelleme -->
-                          <div class="row mb-3">
-                            <label for="updatedDifficulty" class="col-sm-2 col-form-label">Zorluk Güncelle:</label>
-                            <div class="col-sm-10">
-                              <select class="form-select" name="difficulty" id="updatedDifficulty" required>
-                                <option value="Kolay" <%=questions[index].subject==='Kolay' ? 'selected' : '' %>>Kolay
-                                </option>
-                                <option value="Orta" <%=questions[index].subject==='Orta' ? 'selected' : '' %>>Orta
-                                </option>
-                                <option value="Zor" <%=questions[index].subject==='Zor' ? 'selected' : '' %>>Zor
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-<!-- Resim güncelleme -->
-<div class="row mb-3">
-  <label for="resim_yol" class="col-sm-2 col-form-label">Resim Güncelle:</label>
-  <div class="col-sm-7">
-    <input type="file" class="form-control" name="resim_yol" id="resim_yol" accept="image/*">
-  </div>
-</div>
-<input type="hidden" name="currentResim_yol" value="<%= questions[index].resim_yol %>">
+              <% const choices=['A', 'B' , 'C' , 'D' , 'E' ]; %>
+                <% for (let index=0; index < questions.length; index++) { %>
+                  <div class="card <%= index >= itemsPerPage ? 'd-none' : '' %>"
+                    data-page="<%= Math.ceil((index + 1) / itemsPerPage) %>">
+                    <div class="card-header" id="heading<%= index %>">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%= index %>"
+                          aria-expanded="true" aria-controls="collapse<%= index %>">
+                          Soru #<%= index + 1 %>: <%= questions[index].subject %>
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapse<%= index %>" class="collapse" aria-labelledby="heading<%= index %>"
+                      data-parent="#accordion">
+                      <div class="card-body">
+                        <p><strong>Ders:</strong>
+                          <%= questions[index].subject %>
+                        </p>
+                        <p><strong>Zorluk:</strong>
+                          <%= questions[index].difficulty %>
+                        </p>
+
+                        <p><strong>Resim:</strong></p>
+                        <% if (questions[index].resim_yol && questions[index].resim_yol.data) { %>
+                          <img
+                            src="data:<%= questions[index].resim_yol.contentType %>;base64,<%= questions[index].resim_yol.data.toString('base64') %>"
+                            alt="Resim" style="max-width: 100%; height: auto;">
+                          <% } else { %>
+                            <p>Resim yok.</p>
+                            <% } %>
 
 
-                          <!-- Soruyu güncelleme -->
-                          <div class="row mb-3">
-                            <label for="updatedDescription" class="col-sm-2 col-form-label">Soru Güncelle:</label>
-                            <div class="col-sm-10">
-                              <textarea class="form-control" name="description" id="updatedDescription"
-                                style="height: 100px" required><%= questions[index].description %></textarea>
-                            </div>
-                          </div>
-                          <!-- Şıkları güncelleme -->
-                          <!-- A Şıkkı Güncelle -->
-                          <div class="row mb-3">
-                            <label for="updatedOption1" class="col-sm-2 col-form-label">A
-                              Şıkkı Güncelle:</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="options[]" id="updatedOption1"
-                                value="<%= questions[index].options[0] %>" required>
-                            </div>
-                          </div>
-                          <!-- B Şıkkı Güncelle -->
-                          <div class="row mb-3">
-                            <label for="updatedOption2" class="col-sm-2 col-form-label">B
-                              Şıkkı Güncelle:</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="options[]" id="updatedOption2"
-                                value="<%= questions[index].options[1] %>" required>
-                            </div>
-                          </div>
-                          <!-- C Şıkkı Güncelle -->
-                          <div class="row mb-3">
-                            <label for="updatedOption3" class="col-sm-2 col-form-label">C
-                              Şıkkı Güncelle:</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="options[]" id="updatedOption3"
-                                value="<%= questions[index].options[2] %>" required>
-                            </div>
-                          </div>
-                          <!-- D Şıkkı Güncelle -->
-                          <div class="row mb-3">
-                            <label for="updatedOption4" class="col-sm-2 col-form-label">D
-                              Şıkkı Güncelle:</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="options[]" id="updatedOption4"
-                                value="<%= questions[index].options[3] %>" required>
-                            </div>
-                          </div>
-                          <!-- E Şıkkı Güncelle -->
-                          <div class="row mb-3">
-                            <label for="updatedOption5" class="col-sm-2 col-form-label">E
-                              Şıkkı Güncelle:</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" name="options[]" id="updatedOption5"
-                                value="<%= questions[index].options[4] %>" required>
-                            </div>
-                          </div>
+                              <p><strong>Soru:</strong>
+                                <%= questions[index].description %>
+                              </p>
+                              <p><strong>Seçenekler:</strong></p>
+                              <ul>
+                                <% questions[index].options.forEach((option, optionIndex)=> { %>
+                                  <li>
+                                    <%= choices[optionIndex] %>) <%= option %>
+                                  </li>
+                                  <% }); %>
+                              </ul>
+                              <p><strong>Doğru Seçenek:</strong>
+                                <%= choices[questions[index].correctOption ] %>
+                              </p>
+                              <form action="/dashboard/delete/<%= questions[index]._id %>" method="POST"
+                                style="display: inline;">
+                                <button type="submit" class="btn btn-danger rounded-pill">Sil</button>
+                              </form>
 
-                          <!-- doğru şıkkı güncelle -->
-                          <label for="UpdatedcorrectOption">Doğru şıkkı güncelle (0-4 arası
-                            bir sayı girin):</label><br>
-                          <input type="number" id="UpdatedcorrectOption" name="correctOption"
-                            value="<%= questions[index].correctOption %>" required min="0" max="4"><br>
-                          <br>
-                          <div class="row mb-3">
-                            <div class="col-sm-10 offset-sm-2">
-                              <button type="submit" class="btn btn-primary rounded-pill">Kaydet</button>
-                              <button type="button" onclick="toggleEditForm('<%= questions[index]._id %>')"
-                                class="btn btn-danger rounded-pill">İptal</button>
-                            </div>
-                          </div>
-                        </form>
+
+                              <a href="#" onclick="toggleEditForm('<%= questions[index]._id %>')"
+                                class="btn btn-success rounded-pill">Güncelle</a>
+                              <div id="edit-form-<%= questions[index]._id %>" style="display: none;">
+                                <form action="/dashboard/update/<%= questions[index]._id %>" method="POST">
+                                  <!-- Ders güncelleme -->
+                                  <div class="row mb-3">
+                                    <label for="updatedSubject" class="col-sm-2 col-form-label">Ders
+                                      Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <select class="form-select" name="subject" id="updatedSubject" required>
+                                        <option value="matematik" <%=questions[index].subject==='matematik' ? 'selected'
+                                          : '' %>
+                                          >Matematik</option>
+                                        <option value="turkce" <%=questions[index].subject==='turkce' ? 'selected' : ''
+                                          %>
+                                          >Türkçe
+                                        </option>
+                                        <option value="kimya" <%=questions[index].subject==='kimya' ? 'selected' : '' %>
+                                          >Kimya
+                                        </option>
+                                        <option value="biyoloji" <%=questions[index].subject==='biyoloji' ? 'selected'
+                                          : '' %>
+                                          >Biyoloji
+                                        </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- Soru zorluğu güncelleme -->
+                                  <div class="row mb-3">
+                                    <label for="updatedDifficulty" class="col-sm-2 col-form-label">Zorluk
+                                      Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <select class="form-select" name="difficulty" id="updatedDifficulty" required>
+                                        <option value="Kolay" <%=questions[index].subject==='Kolay' ? 'selected' : '' %>
+                                          >Kolay
+                                        </option>
+                                        <option value="Orta" <%=questions[index].subject==='Orta' ? 'selected' : '' %>
+                                          >Orta
+                                        </option>
+                                        <option value="Zor" <%=questions[index].subject==='Zor' ? 'selected' : '' %>>Zor
+                                        </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- Resim güncelleme -->
+                                  <div class="row mb-3">
+                                    <label for="resim_yol" class="col-sm-2 col-form-label">Resim Güncelle:</label>
+                                    <div class="col-sm-7">
+                                      <input type="file" class="form-control" name="resim_yol" id="resim_yol"
+                                        accept="image/*">
+                                    </div>
+                                  </div>
+                                  <input type="hidden" name="currentResim_yol"
+                                    value="<%= questions[index].resim_yol %>">
+
+
+                                  <!-- Soruyu güncelleme -->
+                                  <div class="row mb-3">
+                                    <label for="updatedDescription" class="col-sm-2 col-form-label">Soru
+                                      Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <textarea class="form-control" name="description" id="updatedDescription"
+                                        style="height: 100px" required><%= questions[index].description %></textarea>
+                                    </div>
+                                  </div>
+                                  <!-- Şıkları güncelleme -->
+                                  <!-- A Şıkkı Güncelle -->
+                                  <div class="row mb-3">
+                                    <label for="updatedOption1" class="col-sm-2 col-form-label">A
+                                      Şıkkı Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="options[]" id="updatedOption1"
+                                        value="<%= questions[index].options[0] %>" required>
+                                    </div>
+                                  </div>
+                                  <!-- B Şıkkı Güncelle -->
+                                  <div class="row mb-3">
+                                    <label for="updatedOption2" class="col-sm-2 col-form-label">B
+                                      Şıkkı Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="options[]" id="updatedOption2"
+                                        value="<%= questions[index].options[1] %>" required>
+                                    </div>
+                                  </div>
+                                  <!-- C Şıkkı Güncelle -->
+                                  <div class="row mb-3">
+                                    <label for="updatedOption3" class="col-sm-2 col-form-label">C
+                                      Şıkkı Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="options[]" id="updatedOption3"
+                                        value="<%= questions[index].options[2] %>" required>
+                                    </div>
+                                  </div>
+                                  <!-- D Şıkkı Güncelle -->
+                                  <div class="row mb-3">
+                                    <label for="updatedOption4" class="col-sm-2 col-form-label">D
+                                      Şıkkı Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="options[]" id="updatedOption4"
+                                        value="<%= questions[index].options[3] %>" required>
+                                    </div>
+                                  </div>
+                                  <!-- E Şıkkı Güncelle -->
+                                  <div class="row mb-3">
+                                    <label for="updatedOption5" class="col-sm-2 col-form-label">E
+                                      Şıkkı Güncelle:</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control" name="options[]" id="updatedOption5"
+                                        value="<%= questions[index].options[4] %>" required>
+                                    </div>
+                                  </div>
+
+                                  <!-- doğru şıkkı güncelle -->
+                                  <label for="UpdatedcorrectOption">Doğru şıkkı güncelle (0-4 arası
+                                    bir sayı girin):</label><br>
+                                  <input type="number" id="UpdatedcorrectOption" name="correctOption"
+                                    value="<%= questions[index].correctOption %>" required min="0" max="4"><br>
+                                  <br>
+                                  <div class="row mb-3">
+                                    <div class="col-sm-10 offset-sm-2">
+                                      <button type="submit" class="btn btn-primary rounded-pill">Kaydet</button>
+                                      <button type="button" onclick="toggleEditForm('<%= questions[index]._id %>')"
+                                        class="btn btn-danger rounded-pill">İptal</button>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+
                       </div>
-
                     </div>
                   </div>
-                </div>
-                <% } %>
+                  <% } %>
           </div>
-<!-- modal ile güncelleme kısmını yapabilirsin. ,resim güncellemede sorun var güncelleme yapmıyor(resimler veritabaında object) -->
+          <!-- modal ile güncelleme kısmını yapabilirsin. ,resim güncellemede sorun var güncelleme yapmıyor(resimler veritabaında object) -->
           <!-- Sayfalama düğmeleri -->
           <div class="col-lg-6">
             <ul class="pagination">
@@ -316,6 +331,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</body>
+  </body>
 
-</html>
+  </html>

@@ -8,6 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const multer = require('multer');
 const fs = require('fs');
+const TestScore = require('./models/testScore'); 
 
 // Express uygulamasının oluşturulması
 const app = express();
@@ -128,33 +129,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-//soru çekme quize?
-
-// app.get('/quiz', (req, res) => {
-//   if (req.session.user) {
-//     Question.find({})
-//       .then(questions => {
-//         const mathQuestions = questions.filter(question => question.subject === 'matematik');
-//         const turkishQuestions = questions.filter(question => question.subject === 'turkce');
-//         const chemistryQuestions = questions.filter(question => question.subject === 'kimya');
-  
-//         res.render('quiz', {
-//           user: req.session.user,
-//           mathQuestions,
-//           turkishQuestions,
-//           chemistryQuestions,
-//           message: req.flash('message') });
-//       })
-//       .catch(err => {
-//         console.error('Soru çekme hatası:', err);
-//         req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
-//         res.redirect('/quiz');
-//       });
-//   } else {
-//     req.flash('message', 'Önce giriş yapmalısınız.'); // Giriş yapmadan erişim engelleme
-//     res.redirect('/login');
-//   }
-// });
 
 
 
@@ -354,102 +328,53 @@ app.get('/getQuestions', async (req, res) => {
   }
 });
 
+// Oturum bilgilerini almak için fonksiyonlar
+function getUserEmailFromSession(req) {
+  if (req.session.user) {
+    return req.session.user.email;
+  }
+  return null;
+}
+
+function getUserIdFromSession(req) {
+  if (req.session.user) {
+    return req.session.user._id;
+  }
+  return null;
+}
 
 
 
+// app.js
 
+// Kullanıcının quiz sonuçlarını kaydetmek için POST endpoint'i
+app.post('/saveQuizScore', async (req, res) => {
+  const { correctCount, incorrectCount, blankCount, score, subject,  tarih} = req.body;
+  const userEmail = getUserEmailFromSession(req); // Oturumdan e-posta alınır
+  const userId = getUserIdFromSession(req); // Oturumdan kullanıcı ID'si alınır
+  if (!userEmail || !userId) {
+    return res.status(401).send('Yetkisiz kullanıcı');
+  }
 
+  try {
+    const testScore = new TestScore({
+      user: userId,
+      subject: subject,
+      total: correctCount + incorrectCount + blankCount,
+      correctCount,
+      incorrectCount,
+      blankCount,
+      score,
+      completionDate: new Date(tarih),
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Soru zorluguna göre soruları çekme kodları-->
-// const async = require('async');
-
-// app.get('/quiz', (req, res) => {
-//   if (!req.session.user) {
-//     req.flash('message', 'Önce giriş yapmalısınız.');
-//     res.redirect('/login');
-//     return;
-//   }
-
-//   // İlgili derslere ait soruları asenkron olarak çekiyoruz
-//   async.parallel(
-//     {
-//       mathQuestions: function(callback) {
-//         Question.find({ user: req.session.user._id, subject: 'matematik' })
-//           .exec(callback);
-//       },
-//       turkishQuestions: function(callback) {
-//         Question.find({ user: req.session.user._id, subject: 'turkce' })
-//           .exec(callback);
-//       },
-//       chemistryQuestions: function(callback) {
-//         Question.find({ user: req.session.user._id, subject: 'kimya' })
-//           .exec(callback);
-//       }
-//     },
-//     function(err, results) {
-//       if (err) {
-//         console.error('Soru çekme hatası:', err);
-//         req.flash('message', 'Soruları çekerken bir hata oluştu. Lütfen tekrar deneyin.');
-//         res.redirect('/quiz');
-//         return;
-//       }
-
-//       // Çekilen soruları ayrı ayrı listelere atıyoruz
-//       const mathQuestions = results.mathQuestions;
-//       const turkishQuestions = results.turkishQuestions;
-//       const chemistryQuestions = results.chemistryQuestions;
-
-//       res.render('quiz', {
-//         user: req.session.user,
-//         mathQuestions,
-//         turkishQuestions,
-//         chemistryQuestions,
-//         message: req.flash('message')
-//       });
-//     }
-//   );
-// });
-// app.get('/api/questions', (req, res) => {
-//   const difficulty = req.query.difficulty;
-
-//   // Veritabanından istenen zorluk seviyesine uygun soruları çekme
-//   Question.find({ difficulty: difficulty })
-//     .then((questions) => {
-//       res.json(questions);
-//     })
-//     .catch((err) => {
-//       console.error('Soruları çekerken bir hata oluştu:', err);
-//       res.status(500).json({ error: 'Sorular çekilemedi' });
-//     });
-// });
-
-// *******************************************************************************************************************************************
+    await testScore.save();
+    res.status(201).send('Quiz skoru başarıyla kaydedildi.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Veritabanına kaydedilemedi.');
+  }
+});
 
 
 

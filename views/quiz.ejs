@@ -1,35 +1,145 @@
+
 <%- include('includes/head.ejs') %>
 
 <%- include('includes/nav.ejs') %>
 
+<div class="wrapper_2">
+  <div class="row">
 
+      <!-- Test Skorları Tablosu -->
+<div class="col-lg-6">
 
+  <h5 class="card-title">Sınav Sonuçları</h5>
+   <div class="test-scores">
+      <table class="table">
+        <!-- Tablo başlık kısmı -->
+        <thead>
+          <tr>
+            <th>Ders</th>
+            <th>Tarih</th>
+            <th>Soru Sayısı</th>
+            <th>Doğru Sayısı</th>
+            <th>Yanlış Sayısı</th>
+            <th>Boş Sayısı</th>
+            <th>Toplam Puan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% testScores.forEach(score => { %>
+            <tr>
+              <td><%= score.subject %></td>
+              <td><%= score.tarih %></td>
+              <td><%= score.total %></td>
+              <td><%= score.correctCount %></td>
+              <td><%= score.incorrectCount %></td>
+              <td><%= score.blankCount %></td>
+              <td><%= score.score %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div> 
+</div>
 
-  <div class="wrapper_1">
-   BURADA KULLANICININ SKORLARI TUTULACAK?
- 
+<!-- End Test Skorları Tablosu -->
+
+    <!-- Grafik -->
+    <div class="col-lg-6 chart-container">
+      <h5 class="card-title">Kendinizi ne kadar geliştirdiniz:</h5>
+      <canvas id="mathChart" style="width:300px;height:100px"></canvas>
+      <canvas id="turChart" style="width:300px;height:100px"></canvas>
+      <canvas id="chemChart" style="width:300px;height:100px"></canvas>
+    </div>
+    <!-- End Grafik -->
   </div>
 
-
-  <script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    }
-    
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
-    </script>
-
-
-
-
-
-
-
+  <!-- Test skorları verisini HTML içine gömün -->
+  <div id="testScores" style="display: none;"><%- JSON.stringify(testScores) %></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script src="/js/script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Test skorları verilerini HTML elemanından alın
+    const chartData = JSON.parse(document.getElementById('testScores').innerHTML);
   
-</body>
+    // Sadece "Matematik" dersinin verilerini seçin
+    const mathScores = chartData.filter(score => score.subject === "matematik");
+    const turScores = chartData.filter(score => score.subject === "turkce");
+    const chemScores = chartData.filter(score => score.subject === "kimya");
+    
+    // Tarih ve puan verilerini ayrı dizilere ayırın
+    const mDates = mathScores.map(score => score.tarih);
+    const mScores = mathScores.map(score => score.score);
+    const tDates = turScores.map(score => score.tarih);
+    const tScores = turScores.map(score => score.score);
+    const cDates = chemScores.map(score => score.tarih);
+    const cScores = chemScores.map(score => score.score);
+    
+    
+    new Chart("mathChart", {
+      type: "line",
+      data: {
+        labels: mDates,
+        datasets: [
+          {
+            label: "Matematik",
+            data: mScores,
+            borderColor: "red",
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        }
+      }
+    });
+    
+    new Chart("turChart", {
+      type: "line",
+      data: {
+        labels: tDates,
+        datasets: [
+          {
+            label: "Türkçe",
+            data: tScores,
+            borderColor: "green",
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        }
+      }
+    });
+    
+    new Chart("chemChart", {
+      type: "line",
+      data: {
+        labels: cDates,
+        datasets: [
+          {
+            label: "Kimya",
+            data: cScores,
+            borderColor: "blue",
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        }
+      }
+    });
+</script>
 
+
+</div>
+</body>
 </html>
+

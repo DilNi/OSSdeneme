@@ -11,8 +11,8 @@ const questionSchema = new mongoose.Schema({
         required: true
     },
     resim_yol: {
-        data: Buffer, // Tampon türü ile resim verisini saklayacak alan
-        contentType: String // Resim dosyasının türünü belirten alan (örn. 'image/png', 'image/jpeg' vb.)
+        data: Buffer, 
+        contentType: String 
     },
     description: {
         type: String,

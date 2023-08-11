@@ -108,9 +108,6 @@ body {
   width: 130px;
   height: 50px;
   background: transparent;
-  border: 2px solid #5F847C;
-  outline: none;
-  border-radius: 6px;
   cursor: pointer;
   font-size: 1.1em;
   color: #5F847C;
@@ -132,6 +129,7 @@ body {
   justify-content: center;
   align-items: center;
   transition: transform .5s ease, height .2s ease;
+  
 
 }
 
@@ -156,13 +154,16 @@ body {
 
 .wrapper_2 {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   background: transparent;
   border: 2px solid rgba(255, 255, 255, .5);
   border-radius: 20px;
   backdrop-filter: blur(17px);
-  box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .5);    text-align: center;
+    margin: 0 auto;
+    display: none;
+    margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -264,7 +265,18 @@ body {
 }
 
 
-
+th{
+  color:#5F847C;
+}
+td{
+  color:#575757;
+}
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* İsteğe bağlı: grafikleri yatayda merkezlemek için */
+  gap: 40px; /* Grafikler arasındaki boşluğu ayarlayın */
+}
 
 .wrapper .form-box {
   width: 100%;
@@ -300,7 +312,7 @@ body {
 
 
 }
-.popup {
+.scorePopup {
   position: fixed;
   width: auto;
   height: auto;
@@ -315,6 +327,58 @@ body {
 
 
 }
+.newPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  
+
+}
+
+.close-image-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.centered-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.centered-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
+
+
+
+
 /* Style for the score table */
 #scoreTable {
   width: 100%;
@@ -509,36 +573,111 @@ body {
   margin: 25px 0 10px;
 }
 
-.navigation-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
 
+
+.navigation-buttons {
+  text-align: center;
+  margin-top: 20px;
 }
 
 .navigation-buttons button {
-  margin-top: 5px;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
+
+.navigation-buttons #prevQuestionBtn {
+  background-color: #575757;
+  color: white;
+}
+
+.navigation-buttons #nextQuestionBtn {
+  background-color: #5F847C;
+  color: white;
+}
+
+.navigation-buttons #finishBtn {
+  background-color: #5F847C;
+  color: white;
+}
+
+
+#difficultyContainer {
+  margin-top: 10px;
+}
+
+.difficulty-selection label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.difficulty-selection select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #5F847C;
+  border-radius: 5px;
+  color:#575757;
+}
+
+/* Stil seçeneklerini özelleştirme */
+.difficulty-selection select option {
+  font-size: 14px;
+  background-color: #f2f2f2;
+  color: #575757;
+}
+
+/* Seçilen öğeyi vurgulama */
+.difficulty-selection select option:checked {
+  background-color: #5F847C;
+  color: white;
+}
+
+#options {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+}
+
+#options label {
+  margin-bottom: 10px;
+}
+
+
 /* Soru kutuları */
 .questions-answer-container {
   display: flex;
-  
+  height:700px;
+  width:1200px;
   outline: none;
   border-radius: 6px;
 }
 
 #questionsContainer {
-  flex: 4; /* Orta bölüm daha geniş olsun */
+  flex: 4; 
   max-width: 900px;
   border: 2px solid #5F847C;
   outline: none;
   border-radius: 6px;
   align-items: center;
+  overflow: auto;
+}
+.question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
 }
 
 /* Cevap kutucukları */
 .answers {
-  flex: 1; /* Sağ bölüm daha dar olsun */
+  flex: 1; 
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -555,22 +694,38 @@ body {
   width: calc(25% - 10px);
   height: 45px;
   border: 1px solid #ccc;
-  margin: 5px 5px 2.5px 5px; /* Yukarı 5px, sağ 5px, aşağı 2.5px ve sol 5px boşluk bırakıyoruz */
+  margin: 5px 5px 2.5px 5px; 
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fff;
   border-radius: 6px;
 }
+#clearSelectionBtn {
+  background-color: #575757;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#clearSelectionBtn:hover {
+  background-color: #c82333;
+}
+a.btn-primary {
+  background-color: #5F847C; /* Yeni arka plan rengi */
+  color: white; /* Yeni metin rengi */
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
 
 
 /* Cevap kutucukları */
 .timer {
-  flex: 1; /* Sağ bölüm daha dar olsun */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex: 1; 
+
   border: 2px solid #5F847C;
   outline: none;
   border-radius: 6px;
@@ -578,17 +733,17 @@ body {
   margin-right: 10px;
 }
 
-.timer-box {
-  width: calc(25% - 10px); /* Dört sütun oluşturmak için */
+.countdown {
+  
   height: 45px;
-  border: 1px solid #ccc;
+  position:fixed;
   margin: 5px;
-  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
-  border-radius: 6px;
+
+
 }
+
 
 
 .login.register {
@@ -710,3 +865,4 @@ navbar-nav .login.register p a {
     font-size: 18px;
   }
 }
+
